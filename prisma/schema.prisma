@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+model Facultades {
+  codigo       Int    @id @default(autoincrement())
+  nombre       String
+  ubicacion    String
+  nro_telefono String
+  id_decano    String
+
+  empleados Empleados[] @relation("facultadEmpleados")
+  AREAS     Areas[]
+}
+
+model Empleados {
+  identificacion    String @id
+  nombres           String
+  apellidos         String
+  email             String
+  tipo_contratacion String
+  tipo_empleado     String
+  cod_facultad      Int
+  codigo_sede       Int
+  lugar_nacimiento  Int
+
+  facultad              Facultades         @relation("facultadEmpleados", fields: [cod_facultad], references: [codigo])
+  sede                  Sedes              @relation(fields: [codigo_sede], references: [codigo])
+  ciudad_nacimiento     Ciudades           @relation(fields: [lugar_nacimiento], references: [codigo])
+  tipo_contratacion_ref Tipos_contratacion @relation(fields: [tipo_contratacion], references: [nombre])
+  tipo_empleado_ref     Tipos_empleado     @relation(fields: [tipo_empleado], references: [nombre])
+  AREAS                 Areas[]
+}
+
+model Sedes {
+  codigo     Int    @id @default(autoincrement())
+  nombre     String
+  cod_ciudad Int
+
+  ciudad    Ciudades    @relation(fields: [cod_ciudad], references: [codigo])
+  EMPLEADOS Empleados[]
+}
+
+model Ciudades {
+  codigo   Int    @id @default(autoincrement())
+  nombre   String
+  cod_dpto Int
+
+  departamento Departamentos @relation(fields: [cod_dpto], references: [codigo])
+  EMPLEADOS    Empleados[]
+  Sedes        Sedes[]
+}
+
+model Departamentos {
+  codigo   Int    @id @default(autoincrement())
+  nombre   String
+  cod_pais Int
+
+  pais     Paises     @relation(fields: [cod_pais], references: [codigo])
+  CIUDADES Ciudades[]
+}
+
+model Paises {
+  codigo        Int             @id @default(autoincrement())
+  nombre        String
+  DEPARTAMENTOS Departamentos[]
+}
+
+model Areas {
+  codigo            Int    @id @default(autoincrement())
+  nombre            String
+  FACULTADES_codigo Int
+  id_coordinador    String
+
+  facultad    Facultades  @relation(fields: [FACULTADES_codigo], references: [codigo])
+  coordinador Empleados   @relation(fields: [id_coordinador], references: [identificacion])
+  programas   Programas[]
+}
+
+model Programas {
+  codigo       Int    @id @default(autoincrement())
+  nombre       String
+  AREAS_codigo Int
+
+  area Areas @relation(fields: [AREAS_codigo], references: [codigo])
+}
+
+model Tipos_empleado {
+  nombre    String      @id
+  EMPLEADOS Empleados[]
+}
+
+model Tipos_contratacion {
+  nombre    String      @id
+  EMPLEADOS Empleados[]
+}
