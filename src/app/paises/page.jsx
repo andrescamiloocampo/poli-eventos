@@ -16,7 +16,7 @@ function page() {
         {paises.map((pais)=>(
             <div key={pais.codigo} className='container flex flex-col justify-center items-center bg-slate-100'>   
                 <h1>{pais.codigo}</h1> 
-                <h1>{pais.nombre}</h1>
+                <h1>{pais.nombre}</h1>                
             </div>
         ))}
     </div>
