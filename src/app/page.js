@@ -1,9 +1,10 @@
+'use client'
 import React from 'react'
 import Form from './components/Form'
 
 function Home() {
   return (
-    <div>
+    <div>      
       <Form/>
     </div>
   )

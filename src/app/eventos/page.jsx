@@ -1,58 +1,36 @@
-'use client'
-import React from 'react'
-import { useEffect,useState } from 'react'
+"use client";
+import React from "react";
+import { useEffect, useState } from "react";
+import Event from "../components/Event";
+import Link from "next/link";
 
 function page() {
-  const [eventos,setEventos] = useState([])
+  const [eventos, setEventos] = useState([]);
 
-  useEffect(()=>{
-    fetch('http://localhost:3000/api/eventos')
-    .then(response => response.json())
-    .then(data => setEventos(data))
-  },[])
+  useEffect(() => {
+    fetch("http://localhost:3000/api/eventos")
+      .then((response) => response.json())
+      .then((data) => setEventos(data));
+  }, []);
 
   return (
-    <div className='flex w-full gap-5 justify-center'>        
-        {eventos.map((evento)=>(
-            <div key={evento.id} className='border border-gray-300 p-5 rounded-md m-5'>
-
-                <section className='flex gap-3 m-5'>
-                <h1 className='text-xl font-bold'>
-                    {evento.nombreEvento}
-                </h1>
-                </section>
-
-                <section className='flex gap-3 m-5'>
-                    <h1 className='font-bold'>Fecha:</h1>
-                    <h1>
-                    {evento.Fecha}
-                    </h1>
-                </section>
-
-                <section className='flex gap-3 m-5'>
-                    <h1 className='font-bold'>Facultad:</h1>
-                    <h1>
-                    {evento.facultad}
-                    </h1>
-                </section>
-
-                <section className='flex gap-3 m-5'>
-                    <h1 className='font-bold'>programa:</h1>
-                    <h1>
-                    {evento.programa}
-                    </h1>
-                </section>
-
-                <section className='flex gap-3 m-5'>
-                    <h1 className='font-bold'>ubicacion:</h1>
-                    <h1>
-                    {evento.ubicacion}
-                    </h1>
-                </section>                                                     
-            </div>           
-        ))}
+    <div className="flex flex-col w-full gap-5 items-center justify-center">
+      {eventos.map((evento) => (
+      <Link href={`/eventos/${evento._id}`} key={evento.id} className="w-1/2">
+          <Event
+            nombreEvento={evento.nombreEvento}
+            Fecha={evento.Fecha}
+            facultad={evento.facultad}
+            programa={evento.programa}
+            ubicacion={evento.ubicacion}
+            id={evento._id}
+            descripcion={evento.descripcion}
+            categorias={evento.categorias?.toString().replace(/,/g, ' ')}
+          />          
+      </Link>
+      ))}
     </div>
-  )
+  );
 }
 
-export default page
+export default page;

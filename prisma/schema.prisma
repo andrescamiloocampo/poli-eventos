@@ -19,7 +19,8 @@ model Facultades {
   nro_telefono String
   id_decano    String
 
-  empleados Empleados[] @relation("facultadEmpleados")
+  decano    Empleados   @relation(fields: [id_decano], references: [identificacion])
+  //empleados Empleados[] @relation("facultadEmpleados")
   AREAS     Areas[]
 }
 
@@ -34,12 +35,13 @@ model Empleados {
   codigo_sede       Int
   lugar_nacimiento  Int
 
-  facultad              Facultades         @relation("facultadEmpleados", fields: [cod_facultad], references: [codigo])
+  //facultad              Facultades         @relation("facultadEmpleados", fields: [cod_facultad], references: [codigo])
   sede                  Sedes              @relation(fields: [codigo_sede], references: [codigo])
   ciudad_nacimiento     Ciudades           @relation(fields: [lugar_nacimiento], references: [codigo])
   tipo_contratacion_ref Tipos_contratacion @relation(fields: [tipo_contratacion], references: [nombre])
   tipo_empleado_ref     Tipos_empleado     @relation(fields: [tipo_empleado], references: [nombre])
   AREAS                 Areas[]
+  Facultades            Facultades[]
 }
 
 model Sedes {

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useEventContext } from "../context/eventContext";
 
 function Form() {
   const [Fecha, setFecha] = useState("");
@@ -14,6 +15,20 @@ function Form() {
   const [categorias, setCategorias] = useState([]);
   const [facultad, setFacultad] = useState("");
   const [programa, setPrograma] = useState("");
+  const [descripcion,setDescripcion] = useState("")
+  const {event,setEvent} = useEventContext()
+  const [id,setId] = useState("")
+
+  useEffect(()=>{
+    setId(event?._id)
+    setnombreEvento(event?.nombreEvento)
+    setFecha(event?.Fecha)
+    setFacultad(event?.facultad)
+    setPrograma(event?.programa)
+    setUbicacion(event?.ubicacion)
+    setDescripcion(event?.descripcion)
+    setCategorias(event?.categorias)    
+  },[event])
 
   useEffect(() => {
     fetch("http://localhost:3000/api/facultades")
@@ -43,24 +58,45 @@ function Form() {
       facultad,
       programa,
       ubicacion,
+      descripcion,
       categorias,
     };
-    axios.post('http://localhost:8000',requestData)
+    axios.post('http://localhost:8080',requestData)
     .then(response => console.log(response.data))
     .catch(error => console.log(error))
   };
 
+  const actualizarEvento = (e) =>{
+    e.preventDefault();
+    console.log("actualizar");
+    console.log(nombreEvento, Fecha, facultad, programa, ubicacion, categorias);
+    const requestData = {      
+      id,
+      nombreEvento,
+      Fecha,
+      facultad,
+      programa,
+      ubicacion,
+      descripcion,
+      categorias,
+    };
+    axios.put('http://localhost:8080',requestData)
+    .then(response => console.log(response.data))
+    .catch(error => console.log(error))
+  }
+
   return (
-    <div className="w-full flex justify-center h-screen items-center">
-      <form className="flex flex-col w-1/2 gap-5 p-5 m-5 border border-gray-300 rounded-md">
+    <div className="w-full flex justify-center h-screen my-16 items-center p-5">
+      <form className="flex flex-col w-1/2 gap-5 p-5 m-1 border border-gray-300 rounded-md">
         <h1 className="text-2xl font-semibold">Poli Eventos</h1>
+        <input type="text" className="p-2 border border-gray-300 rounded-md" placeholder="Id del evento" value={id}/>        
         <input
           className="p-2 border border-gray-300 rounded-md"
           type="text"
           placeholder="Ingrese el nombre del evento"
           onChange={(e) => {
             setnombreEvento(e.target.value);
-          }}
+          }}          
         />
         <input
           className="p-2 border border-gray-300 rounded-md"
@@ -69,7 +105,7 @@ function Form() {
           id=""
           onChange={(e) => {
             setFecha(e.target.value);
-          }}
+          }}          
         />
         <select
           className="p-2 border border-gray-300 rounded-md"
@@ -82,7 +118,7 @@ function Form() {
                 setFacultad(facultad.nombre);
               }
             });
-          }}
+          }}          
         >
           <option value="">Seleccione una facultad</option>
           {facultades.map((facultad) => (
@@ -97,7 +133,7 @@ function Form() {
           id=""
           onChange={(e) => {
             setPrograma(e.target.value);
-          }}
+          }}          
         >
           <option value="">Seleccione Programa</option>
           {programas.map((programa) => {
@@ -116,7 +152,7 @@ function Form() {
           id=""
           onChange={(e) => {
             setUbicacion(e.target.value);
-          }}
+          }}          
         >
           <option value="">ubicacion</option>
           {facultades.map((facultad) => {
@@ -131,16 +167,27 @@ function Form() {
         </select>
         <textarea
           className="p-2 border border-gray-300 rounded-md"
+          placeholder="Ingrese la descripción del evento"
+          cols="30"
+          rows="3"
+          onChange={(e)=>{
+            setDescripcion(e.target.value);          
+          }}          
+        >
+        </textarea>
+        <textarea
+          className="p-2 border border-gray-300 rounded-md"
           name=""
           id=""
           placeholder="Ingrese las categorías separadas por espacio"
           cols="30"
           rows="3"
           onChange={(e) => {
-            setTextoCategorias(e.target.value);
-            setCategorias(textoCategorias.split(" "));
-          }}
+            setTextoCategorias(e.target.value);            
+          }}          
         ></textarea>
+
+        <div className="flex gap-3">
         <button
           className="bg-transparent hover:bg-blue-500
          text-blue-700 font-semibold hover:text-white py-2 px-4 
@@ -149,6 +196,16 @@ function Form() {
         >
           Ingresar evento
         </button>
+
+        <button
+          className="bg-transparent hover:bg-blue-500
+         text-blue-700 font-semibold hover:text-white py-2 px-4 
+         border border-blue-500 hover:border-transparent rounded"
+          onClick={(e)=>actualizarEvento(e)}
+        >
+          Actualizar Evento
+        </button>
+        </div>
       </form>
     </div>
   );
