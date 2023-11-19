@@ -54,9 +54,7 @@ function FormularioEmpleado() {
     
 
     const handleformularioEmpleado = (e) => {
-        e.preventDefault();
-        console.log("formulario2");
-        console.log(identificacion, nombres, apellidos, email, tipo_contratacion, tipo_empleado, cod_facultad, codigo_sede,lugar_nacimiento);
+        e.preventDefault();      
         const requestData = {
           identificacion,
           nombres,
@@ -75,7 +73,7 @@ function FormularioEmpleado() {
     return (
         <div className="w-full flex justify-center h-screen items-center">
           <form className="flex flex-col w-1/2 gap-5 p-5 m-5 border border-gray-300 rounded-md">
-            <h1 className="text-2xl font-semibold">Poli Eventos</h1>
+            <h1 className="text-2xl font-semibold">Registrar empleado</h1>
             <input
               className="p-2 border border-gray-300 rounded-md"
               type="text"

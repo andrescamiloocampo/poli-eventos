@@ -17,7 +17,7 @@ function page() {
     <div className="flex flex-col w-full gap-5 items-center justify-center">
       {eventos.map((evento) => (
       <Link href={`/eventos/${evento._id}`} key={evento.id} className="w-1/2">
-          <Event
+          <Event 
             nombreEvento={evento.nombreEvento}
             Fecha={evento.Fecha}
             facultad={evento.facultad}

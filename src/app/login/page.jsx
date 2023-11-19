@@ -25,8 +25,7 @@ function Login() {
   }  
 
   return (    
-    <div className='w-full h-[90vh] flex flex-col items-center justify-center'>
-        {JSON.stringify(user)}
+    <div className='w-full h-[90vh] flex flex-col items-center justify-center'>        
         <form action="" onSubmit={(e)=>handleLogin(e)} 
         className='flex flex-col text-center w-1/2 p-5 border 
         border-gray-300 rounded-md gap-6 bg-white'>

@@ -13,16 +13,16 @@ function page() {
   const [evento, setEvento] = useState({});
   const [suscribed, setSuscribed] = useState(false);
   const { user, setUser } = useUserContext();
-  const {event,setEvent} = useEventContext();
+  const { event, setEvent } = useEventContext();
   const [users, setUsers] = useState([]);
-  const [comentario,setComentario] = useState("")
+  const [comentario, setComentario] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     fetch(`http://localhost:8080/eventos/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        setEvento(data);      
+        setEvento(data);
       });
   }, []);
 
@@ -41,29 +41,32 @@ function page() {
     axios.put(`http://localhost:8080/eventos/${id}`, requestData);
   };
 
-  const eliminar = () =>{     
-    axios.delete(`http://localhost:8080/eventos/${id}`)
-    .then(data => console.log(data))
-    .catch(error => console.log(error))
-    .finally(router.push('/'))
-  }
+  const eliminar = () => {
+    axios
+      .delete(`http://localhost:8080/eventos/${id}`)
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error))
+      .finally(router.push("/"));
+  };
 
-  const actualizar = () =>{   
-    setEvent(evento)
-    router.push("/")
-  }
+  const actualizar = () => {
+    setEvent(evento);
+    router.push("/");
+  };
 
-  const comentar = () =>{
+  const comentar = () => {
     const requestData = {
-      name:user?.nombres,
-      lastname:user?.apellidos,
-      comentario:comentario,      
-    }
-    axios.post(`http://localhost:8080/eventos/${id}`,requestData)
-    .then(data => console.log(data))
-    .catch(error => console.log(error))    
-
-  }
+      name: user?.nombres,
+      lastname: user?.apellidos,
+      comentario: comentario,
+    };
+    axios
+      .post(`http://localhost:8080/eventos/${id}`, requestData)
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error))
+      .finally(router.replace(`http://localhost:3000/eventos/${id}`));
+      
+  };
   return (
     <main className="w-full h-screen flex justify-center">
       <section className="w-1/2 flex flex-col items-center">
@@ -94,7 +97,7 @@ function page() {
           onClick={() => {
             inscripcion();
           }}
-          className="bg-grey-lightest m-5 border-4 border-dashed rounded border-black p-2 font-semibold text-black"
+          className="bg-grey-lightest m-5 border-2 border-dashed rounded border-black p-2 font-semibold text-black"
         >
           Inscribirse al evento
         </button>
@@ -106,8 +109,7 @@ function page() {
             focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
             dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 
             dark:focus:ring-red-900"
-            
-            onClick = {()=>{
+            onClick={() => {
               eliminar();
             }}
           >
@@ -122,7 +124,7 @@ function page() {
       focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 
       text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 
       dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-            onClick={()=>actualizar()}
+            onClick={() => actualizar()}
           >
             Actualizar evento
           </button>
@@ -130,15 +132,26 @@ function page() {
 
         <article className="w-full border border-gray-300 h-96 rounded-md m-6 flex flex-col items-center">
           <h1 className="text-xl m-3 text-black ">Comentarios</h1>
-          <article className="overflow-y-scroll bg-gray-100 h-full w-full"></article>
+          <article className="overflow-y-scroll bg-gray-100 h-52 w-full">            
+            {evento.comentarios &&
+              evento.comentarios.map((comentario, index) => (
+                <article key={index} className="flex flex-col bg-white m-3 p-2 rounded-md border border-gray-600">
+                  <h1 className="text-xm font-semibold">{comentario.name} {comentario.lastname}</h1>                
+                  <p>{comentario.comentario}</p>                  
+                </article>
+              ))}
+          </article>
           <article className="flex w-full">
             <input
               type="text"
               placeholder="Ingresar comentario"
-              className="w-4/5" 
-              onChange={(e)=>setComentario(e.target.value)}                         
+              className="w-4/5 border border-b-gray-300"
+              onChange={(e) => setComentario(e.target.value)}              
             />
-            <button className="bg-blue-500 text-white p-2 font-semibold w-1/5 " onClick={()=>comentar()}>        
+            <button
+              className="bg-blue-500 text-white p-2 font-semibold w-1/5 "
+              onClick={() => comentar()}
+            >
               Enviar
             </button>
           </article>

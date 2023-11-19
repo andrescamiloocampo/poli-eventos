@@ -96,26 +96,31 @@ function Form() {
           placeholder="Ingrese el nombre del evento"
           onChange={(e) => {
             setnombreEvento(e.target.value);
-          }}          
+          }}      
+          value={nombreEvento}    
         />
+
         <input
           className="p-2 border border-gray-300 rounded-md"
           type="date"
           name=""
           id=""
+          value={Fecha}
           onChange={(e) => {
             setFecha(e.target.value);
           }}          
         />
+
         <select
           className="p-2 border border-gray-300 rounded-md"
           name=""
           id=""
+          value={facultad}
           onChange={(e) => {
             setSelectedValue(e.target.value);
-            facultades.map((facultad) => {
-              if (facultad.codigo == e.target.value) {
-                setFacultad(facultad.nombre);
+            facultades.map((fac) => {
+              if (fac.codigo == e.target.value) {
+                setFacultad(fac.nombre);
               }
             });
           }}          
@@ -127,10 +132,12 @@ function Form() {
             </option>
           ))}
         </select>
+
         <select
           className="p-2 border border-gray-300 rounded-md"
           name=""
           id=""
+          value={programa}
           onChange={(e) => {
             setPrograma(e.target.value);
           }}          
@@ -146,10 +153,12 @@ function Form() {
             }
           })}
         </select>
+
         <select
           className="p-2 border border-gray-300 rounded-md"
           name=""
           id=""
+          value={ubicacion}
           onChange={(e) => {
             setUbicacion(e.target.value);
           }}          
@@ -165,16 +174,18 @@ function Form() {
             }
           })}
         </select>
+
         <textarea
           className="p-2 border border-gray-300 rounded-md"
           placeholder="Ingrese la descripción del evento"
           cols="30"
           rows="3"
+          value={descripcion}
           onChange={(e)=>{
             setDescripcion(e.target.value);          
           }}          
-        >
-        </textarea>
+        ></textarea>
+
         <textarea
           className="p-2 border border-gray-300 rounded-md"
           name=""
@@ -182,8 +193,9 @@ function Form() {
           placeholder="Ingrese las categorías separadas por espacio"
           cols="30"
           rows="3"
+          value={categorias}
           onChange={(e) => {
-            setTextoCategorias(e.target.value);            
+            setCategorias(e.target.value.split(" "));            
           }}          
         ></textarea>
 
